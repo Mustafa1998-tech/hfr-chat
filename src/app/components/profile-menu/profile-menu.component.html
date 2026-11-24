@@ -1,0 +1,43 @@
+<div class="profile-menu" role="menu" aria-label="Profile">
+  <div class="menu-header">
+    <div class="menu-title">Profile</div>
+    <div class="menu-name">{{ user()?.displayName ?? 'Account' }}</div>
+    <div class="menu-email">{{ user()?.email ?? '' }}</div>
+  </div>
+
+  <div class="divider"></div>
+
+  <nav class="menu-items">
+    <button class="menu-item" role="menuitem" (click)="searchRequested.emit()">
+      <svg lucideSearch [size]="13" [strokeWidth]="1.8"></svg>
+      <span>Search</span>
+    </button>
+    <button class="menu-item" role="menuitem" (click)="settingsRequested.emit()">
+      <svg lucideSettings [size]="13" [strokeWidth]="1.8"></svg>
+      <span>Settings</span>
+    </button>
+    <button class="menu-item" role="menuitem" (click)="tourRequested.emit()">
+      <svg lucideCompass [size]="13" [strokeWidth]="1.8"></svg>
+      <span>Take a Tour</span>
+    </button>
+    <button class="menu-item" role="menuitem" (click)="helpRequested.emit()">
+      <svg lucideCircleHelp [size]="13" [strokeWidth]="1.8"></svg>
+      <span>Help &amp; Support</span>
+    </button>
+    <button class="menu-item" role="menuitem" (click)="translateRequested.emit()">
+      <svg lucideLanguages [size]="13" [strokeWidth]="1.8"></svg>
+      <span>Translate</span>
+    </button>
+    <button class="menu-item" role="menuitem" (click)="platform.saveLanguage('ar'); closed.emit()">
+      <svg lucideLanguages [size]="13" [strokeWidth]="1.8"></svg>
+      <span>Arabic</span>
+    </button>
+  </nav>
+
+  <div class="divider"></div>
+
+  <div class="theme-row">
+    <app-theme-toggle [theme]="theme()" (themeChange)="themeChange.emit($event)" />
+  </div>
+
+</div>

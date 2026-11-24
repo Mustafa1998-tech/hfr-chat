@@ -1,0 +1,199 @@
+/* ============================================================
+   HFR CHAT — design tokens
+   Light values mirror the reference screenshots; the dark theme
+   is a separate token set (not a colour inversion).
+   ============================================================ */
+
+:root {
+  --font-ui: 'Segoe UI Variable', 'Segoe UI', system-ui, Arial, Helvetica, sans-serif;
+
+  /* canvas + surfaces */
+  --app-bg: #f6f8f8;
+  --surface: #ffffff;
+  --sidebar-bg: transparent;
+  --surface-muted: #f6f8f8;
+  --surface-hover: #eef2f1;
+  --surface-active: #e9f2ef;
+  --surface-raised: #ffffff;
+
+  /* borders */
+  --border: #e5e9e8;
+  --border-strong: #d8dfdd;
+  --composer-border: #a8cfc5;
+
+  /* text */
+  --text: #1f2426;
+  --text-secondary: #5f686b;
+  --text-muted: #929b9d;
+  --text-placeholder: #a7aeaf;
+
+  /* brand */
+  --accent: #0f806f;
+  --accent-strong: #0b6d5f;
+  --accent-text: #0d7c6b;
+  --accent-soft: #eaf5f2;
+  --accent-soft-strong: #dceee9;
+  --accent-muted: #5c9e91;
+  --accent-icon: #ffffff;
+
+  /* skill cards */
+  --skill-card: #f0f7f5;
+  --skill-card-disabled: #ffffff;
+  --skill-icon-bg: #0f806f;
+
+  /* switches */
+  --switch-off: #d7dddc;
+  --switch-on: #10927c;
+
+  /* misc */
+  --shadow-menu: 0 8px 28px rgba(23, 36, 34, 0.13), 0 1px 3px rgba(23, 36, 34, 0.08);
+  --shadow-modal: 0 18px 48px rgba(20, 32, 30, 0.18), 0 2px 8px rgba(20, 32, 30, 0.08);
+  --backdrop: rgba(238, 242, 241, 0.55);
+  --ring: rgba(15, 128, 111, 0.14);
+
+  /* geometry */
+  --shell-pad-x: 10px;
+  --shell-pad-top: 20px;
+  --shell-pad-bottom: 10px;
+  --shell-gap: 0px;
+  --card-radius: 12px;
+  --control-radius: 6px;
+}
+
+:root[data-theme='dark'] {
+  --app-bg: #0a0b0b;
+  --surface: #0e0f0f;
+  --sidebar-bg: transparent;
+  --surface-muted: #151717;
+  --surface-hover: #1c1f1e;
+  --surface-active: #17322c;
+  --surface-raised: #1a1c1c;
+
+  --border: #272b2a;
+  --border-strong: #343a38;
+  --composer-border: #2c6a5d;
+
+  --text: #e7eaea;
+  --text-secondary: #a4acae;
+  --text-muted: #798284;
+  --text-placeholder: #6d7678;
+
+  --accent: #1baf94;
+  --accent-strong: #15987f;
+  --accent-text: #34c5a8;
+  --accent-soft: #14342e;
+  --accent-soft-strong: #1a453c;
+  --accent-muted: #16806e;
+  --accent-icon: #061a16;
+
+  --skill-card: #12201d;
+  --skill-card-disabled: #121414;
+  --skill-icon-bg: #1baf94;
+
+  --switch-off: #3a4140;
+  --switch-on: #1baf94;
+
+  --shadow-menu: 0 8px 28px rgba(0, 0, 0, 0.5), 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow-modal: 0 18px 48px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4);
+  --backdrop: rgba(4, 6, 6, 0.62);
+  --ring: rgba(27, 175, 148, 0.2);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: var(--app-bg);
+}
+
+body {
+  font-family: var(--font-ui);
+  color: var(--text);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: 0;
+  background: none;
+  padding: 0;
+}
+
+input::placeholder {
+  color: var(--text-placeholder);
+}
+
+::selection {
+  background: var(--accent-soft-strong);
+}
+
+/* Arabic / RTL layout — mirror the shell and composer while keeping text natural. */
+[dir='rtl'] .app-shell {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .main-surface {
+  border-radius: var(--card-radius);
+}
+
+[dir='rtl'] .composer-input,
+[dir='rtl'] .chat-header,
+[dir='rtl'] .page-header {
+  text-align: right;
+  direction: rtl;
+}
+
+[dir='rtl'] .composer-label {
+  margin-left: 0;
+  margin-right: 12px;
+}
+
+[dir='rtl'] .brand-row,
+[dir='rtl'] .chat-heading,
+[dir='rtl'] .nav-item,
+[dir='rtl'] .chat-item,
+[dir='rtl'] .profile-btn {
+  direction: rtl;
+  text-align: right;
+}
+
+[dir='rtl'] .brand-row {
+  flex-direction: row-reverse;
+}
+
+[dir='rtl'] .profile-btn > svg {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+[dir='rtl'] .chat-actions {
+  flex-direction: row-reverse;
+}
+
+/* Thin, unobtrusive scrollbars that match the reference */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-strong);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}

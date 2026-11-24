@@ -1,0 +1,25 @@
+<div class="backdrop" (click)="closed.emit()">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Search" (click)="$event.stopPropagation()">
+    <div class="modal-head">
+      <h2>Search</h2>
+      <button class="close" aria-label="Close" (click)="closed.emit()">
+        <svg lucideX [size]="14" [strokeWidth]="1.8"></svg>
+      </button>
+    </div>
+    <div class="field">
+      <svg lucideSearch [size]="13" [strokeWidth]="1.8"></svg>
+      <input type="text" placeholder="Search conversations..." [(ngModel)]="term" (ngModelChange)="search()" />
+    </div>
+    <div class="results">
+      @for (chat of results(); track chat.id) {
+        <button class="result" (click)="open(chat)">
+          <svg lucideMessageCircle [size]="14" [strokeWidth]="1.7"></svg>
+          <span class="title">{{ chat.title }}</span>
+          <span class="time">{{ relative(chat.updatedAt) }}</span>
+        </button>
+      } @empty {
+        @if (searched()) { <p class="empty">No conversations found</p> }
+      }
+    </div>
+  </div>
+</div>

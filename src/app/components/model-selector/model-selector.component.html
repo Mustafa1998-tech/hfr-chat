@@ -1,0 +1,32 @@
+<div class="model-selector">
+  <button class="model-trigger" (click)="toggle()" [attr.aria-expanded]="open()">
+    <span>{{ currentName() }}</span>
+    @if (open()) {
+      <svg lucideChevronUp [size]="12" [strokeWidth]="2"></svg>
+    } @else {
+      <svg lucideChevronDown [size]="12" [strokeWidth]="2"></svg>
+    }
+  </button>
+
+  @if (open()) {
+    <div class="model-menu" role="listbox">
+      @for (model of models(); track model.id) {
+        <button
+          class="model-option"
+          role="option"
+          [attr.aria-selected]="selected() === model.id"
+          [class.selected]="selected() === model.id"
+          (click)="select(model.id)"
+        >
+          <span class="option-copy">
+            <span class="option-name">{{ model.name }}</span>
+            <span class="option-desc">{{ model.description }}</span>
+          </span>
+          @if (selected() === model.id) {
+            <svg lucideCheck [size]="13" [strokeWidth]="2"></svg>
+          }
+        </button>
+      }
+    </div>
+  }
+</div>

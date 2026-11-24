@@ -1,0 +1,53 @@
+<div class="backdrop" (click)="closed.emit()">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Translate" (click)="$event.stopPropagation()">
+    <div class="head">
+      <span class="icon"><svg lucideLanguages [size]="15" [strokeWidth]="1.8"></svg></span>
+      <strong>Translate</strong>
+      <button class="close" aria-label="Close" (click)="closed.emit()">
+        <svg lucideX [size]="14" [strokeWidth]="1.8"></svg>
+      </button>
+    </div>
+
+    <div class="direction">
+      <select aria-label="From language" [(ngModel)]="from">
+        <option value="auto">Auto detect</option>
+        <option value="en">English</option>
+        <option value="ar">العربية</option>
+      </select>
+      <button class="swap" aria-label="Swap languages" (click)="swap()">
+        <svg lucideArrowLeftRight [size]="14" [strokeWidth]="1.8"></svg>
+      </button>
+      <select aria-label="To language" [(ngModel)]="to">
+        <option value="ar">العربية</option>
+        <option value="en">English</option>
+      </select>
+    </div>
+
+    <textarea
+      aria-label="Text to translate"
+      rows="5"
+      placeholder="Type text to translate…"
+      [ngModel]="text()"
+      (ngModelChange)="text.set($event); detect()"
+    ></textarea>
+
+    <div class="actions">
+      <button class="detect" (click)="detect()">Detect</button>
+      <button class="go" [disabled]="busy() || !text().trim()" (click)="translate()">
+        @if (busy()) {
+          <svg lucideLoader [size]="12" [strokeWidth]="2"></svg>
+        }
+        Translate
+      </button>
+    </div>
+
+    @if (error()) { <p class="error">{{ error() }}</p> }
+
+    @if (result()) {
+      <div class="result" [attr.dir]="to() === 'ar' ? 'rtl' : 'ltr'">
+        <span class="result-label">{{ to() === 'ar' ? 'الترجمة' : 'Translation' }}</span>
+        <p>{{ result() }}</p>
+      </div>
+    }
+  </div>
+</div>

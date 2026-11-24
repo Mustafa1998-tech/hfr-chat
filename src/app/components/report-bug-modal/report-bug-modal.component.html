@@ -1,0 +1,55 @@
+<div class="backdrop" (click)="closed.emit()">
+  <div
+    class="modal"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="report-bug-title"
+    (click)="$event.stopPropagation()"
+  >
+    <div class="modal-top">
+      <span class="modal-icon">
+        <svg lucideBug [size]="14" [strokeWidth]="1.9"></svg>
+      </span>
+      <button class="close-btn" aria-label="Close" (click)="closed.emit()">
+        <svg lucideX [size]="14" [strokeWidth]="1.8"></svg>
+      </button>
+    </div>
+
+    <h2 id="report-bug-title" class="modal-title">Report a bug</h2>
+    <p class="modal-subtitle">Steps to reproduce, expected vs actual behavior…</p>
+
+    <label class="field-label" for="bug-title">Title <span>*</span></label>
+    <input
+      id="bug-title"
+      class="text-input"
+      type="text"
+      placeholder="Short summary"
+      [(ngModel)]="title"
+    />
+
+    <label class="field-label" for="bug-details">What happened? <span>*</span></label>
+    <textarea
+      id="bug-details"
+      class="text-area"
+      rows="3"
+      placeholder="Steps to reproduce, expected vs actual behavior…"
+      [(ngModel)]="details"
+    ></textarea>
+
+    <label class="check-row">
+      <input type="checkbox" [(ngModel)]="attachScreenshot" />
+      <span>Attach a screenshot of the current page</span>
+    </label>
+
+    @if (submitted()) {
+      <p class="prototype-note">
+        Reporting is not connected to a service yet — nothing was sent.
+      </p>
+    }
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="closed.emit()">Cancel</button>
+      <button class="btn-submit" [disabled]="!canSubmit" (click)="submit()">Submit</button>
+    </div>
+  </div>
+</div>

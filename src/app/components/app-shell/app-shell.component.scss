@@ -1,0 +1,61 @@
+:host {
+  display: block;
+  height: 100%;
+}
+
+.app-shell {
+  --sidebar-width: 196px;
+  display: flex;
+  gap: var(--shell-gap);
+  height: 100%;
+  padding: var(--shell-pad-top) var(--shell-pad-x) var(--shell-pad-bottom);
+  background: var(--app-bg);
+  overflow: hidden;
+
+  &.collapsed {
+    --sidebar-width: 64px;
+  }
+}
+
+.main-surface {
+  position: relative;
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  overflow: hidden;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.floating-action {
+  position: absolute;
+  right: 14px;
+  bottom: 12px;
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #fff;
+  background: linear-gradient(135deg, #ff9c8e 0%, #f4718f 100%);
+  box-shadow: 0 1px 4px rgba(180, 80, 100, 0.28);
+
+  svg {
+    display: block;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    --sidebar-width: 64px;
+    padding: 8px 6px 6px;
+    gap: 0;
+  }
+
+  .floating-action {
+    right: 10px;
+    bottom: 10px;
+  }
+}

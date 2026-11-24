@@ -1,0 +1,98 @@
+<div class="app-shell" [class.collapsed]="collapsed()">
+  <app-sidebar
+    [(collapsed)]="collapsed"
+    [page]="page()"
+    (pageChange)="page.set($event)"
+    [(profileMenuOpen)]="profileMenuOpen"
+    [chats]="platform.chats()"
+    [username]="platform.user()?.displayName ?? 'Account'"
+    (chatSelected)="onChatSelected($event)"
+    (newChat)="platform.closeChat()"
+  />
+
+  <main class="main-surface" (click)="profileMenuOpen.set(false)">
+    @if (platform.activeChatId()) {
+      <app-chat-view (translateRequested)="openTranslate()" />
+    } @else {
+      @switch (page()) {
+        @case ('chat') {
+          <app-chat-home
+            [(selectedModel)]="selectedModel"
+            [(deepResearch)]="deepResearch"
+            [models]="models()"
+            (send)="onHomeSend($event)"
+          />
+        }
+        @case ('skills') {
+          <app-skills-page />
+        }
+        @case ('projects') {
+          <app-projects-page
+            [projects]="platform.projects()"
+            (createProject)="projectModalOpen.set(true)"
+            (deleteProject)="platform.deleteProject($event)"
+          />
+        }
+        @case ('agents') {
+          <app-agents-page />
+        }
+      }
+    }
+
+    <button class="floating-action" aria-label="Report a bug" (click)="reportModalOpen.set(true)">
+      <svg lucideBug [size]="12" [strokeWidth]="2"></svg>
+    </button>
+  </main>
+
+  @if (profileMenuOpen()) {
+    <app-profile-menu
+      [theme]="theme()"
+      [user]="platform.user()"
+      (themeChange)="setTheme($event)"
+      (closed)="profileMenuOpen.set(false)"
+      (searchRequested)="searchModalOpen.set(true); profileMenuOpen.set(false)"
+      (settingsRequested)="settingsModalOpen.set(true); profileMenuOpen.set(false)"
+      (tourRequested)="tourOpen.set(true); profileMenuOpen.set(false)"
+      (helpRequested)="helpModalOpen.set(true); profileMenuOpen.set(false)"
+      (translateRequested)="openTranslate(); profileMenuOpen.set(false)"
+    />
+  }
+
+  @if (projectModalOpen()) {
+    <app-create-project-modal
+      (closed)="projectModalOpen.set(false)"
+      (create)="createProject($event.name, $event.description)"
+    />
+  }
+
+  @if (reportModalOpen()) {
+    <app-report-bug-modal (closed)="reportModalOpen.set(false)" />
+  }
+
+  @if (searchModalOpen()) {
+    <app-search-modal (closed)="searchModalOpen.set(false)" />
+  }
+
+  @if (settingsModalOpen()) {
+    <app-settings-modal (closed)="settingsModalOpen.set(false)" />
+  }
+
+  @if (helpModalOpen()) {
+    <app-help-support-modal
+      (closed)="helpModalOpen.set(false)"
+      (openReport)="helpModalOpen.set(false); reportModalOpen.set(true)"
+      (openTour)="helpModalOpen.set(false); tourOpen.set(true)"
+    />
+  }
+
+  @if (tourOpen()) {
+    <app-tour (closed)="tourOpen.set(false)" />
+  }
+
+  @if (translateOpen()) {
+    <app-translate-modal
+      [initialText]="translateInitial()"
+      (closed)="translateOpen.set(false)"
+    />
+  }
+</div>

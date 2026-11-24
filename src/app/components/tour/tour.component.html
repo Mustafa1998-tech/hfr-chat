@@ -1,0 +1,15 @@
+<div class="tour-backdrop" (click)="closed.emit()">
+  <div class="tour-card" role="dialog" aria-label="Tour" (click)="$event.stopPropagation()">
+    <div class="accent-line"></div>
+    <button class="close" aria-label="Close" (click)="closed.emit()">×</button>
+    <h2>{{ steps[index()].title }}</h2>
+    <p>{{ steps[index()].body }}</p>
+    <div class="footer">
+      <button class="skip" (click)="closed.emit()">Skip tour</button>
+      <button class="next" (click)="next()">
+        {{ index() === steps.length - 1 ? 'Finish' : 'Next' }}
+        <span>›</span>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<section class="agents-page">
+  <header class="page-header">
+    <div>
+      <h1>الوكلاء الذكيون</h1>
+      <p>Conversational Agents</p>
+    </div>
+    <button class="primary-btn" (click)="showCreate.set(!showCreate())">
+      <svg lucidePlus [size]="13" [strokeWidth]="2"></svg>
+      <span>إنشاء وكيل</span>
+    </button>
+  </header>
+
+  <div class="page-body">
+    @if (showCreate()) {
+      <div class="create-panel">
+        <div class="create-head">
+          <strong>وكيل جديد</strong>
+          <button aria-label="Close" (click)="showCreate.set(false)">
+            <svg lucideX [size]="13" [strokeWidth]="1.8"></svg>
+          </button>
+        </div>
+        <input type="text" placeholder="اسم الوكيل" [(ngModel)]="newName" />
+        <input type="text" placeholder="وصف مختصر" [(ngModel)]="newDescription" />
+        <button class="primary-btn" (click)="addLocalAgent()">إضافة</button>
+        <small>الوكلاء المضافة هنا تظهر في القائمة محليًا ولا تنفّذ تعليمات إضافية.</small>
+      </div>
+    }
+
+    @if (localNotice()) {
+      <div class="notice">
+        الوكلاء المخصصون يُضافون إلى القائمة محليًا فقط؛ الوكلاء المدمجون هم من يغيّرون سياق الرد.
+      </div>
+    }
+
+    <div class="agent-grid">
+      @for (agent of agents(); track agent.id) {
+        <article class="agent-card">
+          <div class="agent-icon">
+            @switch (agent.icon) {
+              @case ('general') {
+                <svg lucideBot [size]="17" [strokeWidth]="1.8"></svg>
+              }
+              @case ('search') {
+                <svg lucideSearch [size]="17" [strokeWidth]="1.8"></svg>
+              }
+              @case ('code') {
+                <svg lucideCodeXml [size]="17" [strokeWidth]="1.8"></svg>
+              }
+              @case ('orchestrator') {
+                <svg lucideWorkflow [size]="17" [strokeWidth]="1.8"></svg>
+              }
+              @default {
+                <svg lucideBot [size]="17" [strokeWidth]="1.8"></svg>
+              }
+            }
+          </div>
+          <div class="agent-copy">
+            <div class="agent-title">
+              <h2>{{ agent.name }}</h2>
+              <span class="badge" [class.core]="agent.badge === 'أساسي'">{{ agent.badge }}</span>
+            </div>
+            <p>{{ agent.description }}</p>
+            @if (agent.id === 'search') {
+              <small>أدوات البحث المباشر غير موصولة؛ سيحلل الوكيل النص المتاح فقط.</small>
+            }
+          </div>
+          <button class="start" (click)="start(agent)">ابدأ محادثة</button>
+        </article>
+      }
+    </div>
+  </div>
+</section>

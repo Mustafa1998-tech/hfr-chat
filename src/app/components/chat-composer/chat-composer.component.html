@@ -1,0 +1,161 @@
+<div class="composer-wrap">
+  <div class="composer-label">
+    <svg lucideMessageSquare [size]="11" [strokeWidth]="1.8"></svg>
+    <span>{{ platform.tr('chat') }}</span>
+  </div>
+
+  <div class="composer">
+    @if (conversation.active()) {
+      <div class="call-panel" role="status" aria-label="Voice conversation">
+        <div class="call-head">
+          <span
+            class="call-dot"
+            [class.user]="conversation.speaker() === 'user'"
+            [class.ai]="conversation.speaker() === 'ai'"
+          ></span>
+          <strong>{{ conversation.stateLabel }}</strong>
+          @if (conversation.error()) {
+            <span class="call-error">{{ conversation.error() }}</span>
+          }
+        </div>
+        <div class="call-transcript">
+          @for (turn of conversation.turns(); track $index) {
+            <p [class.ai]="turn.role === 'ai'">
+              <span>{{ turn.role === 'user' ? 'أنت' : 'HFR' }}</span>
+              {{ turn.text }}
+            </p>
+          }
+          @if (conversation.transcript() && conversation.state() === 'user_speaking') {
+            <p><span>أنت</span> {{ conversation.transcript() }}…</p>
+          }
+          @if (conversation.aiText()) {
+            <p class="ai"><span>HFR</span> {{ conversation.aiText() }}</p>
+          }
+        </div>
+        @if (conversation.latency(); as timing) {
+          <small class="call-latency">
+            STT {{ timing.sttMs }}ms · AI {{ timing.aiMs }}ms · TTS {{ timing.ttsMs }}ms · total {{ timing.totalMs }}ms
+          </small>
+        }
+        <div class="call-actions">
+          <button (click)="conversation.toggleMute()">
+            {{ conversation.muted() ? 'فتح الميكروفون' : 'كتم' }}
+          </button>
+          @if (conversation.state() === 'ai_speaking') {
+            <button (click)="conversation.interrupt()">مقاطعة</button>
+          }
+          <button class="end-call" (click)="conversation.end()">إنهاء المكالمة</button>
+        </div>
+      </div>
+    }
+
+    @if (conversation.error() && !conversation.active()) {
+      <div class="voice-status error" role="alert">{{ conversation.error() }}</div>
+    }
+
+    @if (voice.state() !== 'idle' || voice.reply()) {
+      <div class="voice-status" [class.error]="voice.state() === 'error'" role="status">
+        <span class="voice-dot" [class.active]="voice.isRecording"></span>
+        <span class="voice-text">{{ voiceStatusText }}</span>
+        @if (voice.transcript()) {
+          <span class="voice-transcript">“{{ voice.transcript() }}”</span>
+        }
+        @if (voice.state() === 'speaking') {
+          <button aria-label="Stop playback" (click)="voice.stopPlayback()">Stop</button>
+        }
+        @if (voice.reply() && voice.state() !== 'speaking') {
+          <button aria-label="Replay voice reply" (click)="voice.replay()">Replay</button>
+        }
+        <button aria-label="Cancel voice" (click)="voice.cancel()">Cancel</button>
+      </div>
+    }
+
+    <input
+      #fileInput
+      type="file"
+      multiple
+      hidden
+      (change)="onFilesSelected($event)"
+    />
+
+    @if (attachments().length > 0) {
+      <div class="attachment-chips">
+        @for (file of attachments(); track file.id) {
+          <span class="attachment-chip">
+            {{ file.name }}
+            <button aria-label="Remove attachment" (click)="removeAttachment(file.id)">
+              <svg lucideX [size]="10" [strokeWidth]="2"></svg>
+            </button>
+          </span>
+        }
+      </div>
+    }
+
+    <input
+      class="composer-input"
+      type="text"
+      [placeholder]="platform.tr('placeholder')"
+      aria-label="Message HFR CHAT"
+      [(ngModel)]="draft"
+      (keydown.enter)="submit()"
+    />
+
+    <div class="composer-toolbar">
+      <button class="icon-control attach" aria-label="Attach" (click)="fileInputRef()?.nativeElement.click()">
+        <svg lucidePlus [size]="15" [strokeWidth]="1.8"></svg>
+      </button>
+
+      <button
+        class="deep-research"
+        [class.on]="deepResearch()"
+        (click)="deepResearch.set(!deepResearch())"
+      >
+        <span class="switch"><span class="switch-thumb"></span></span>
+        <span>{{ platform.tr('deepResearch') }}</span>
+      </button>
+
+      <span class="toolbar-spacer"></span>
+
+      <app-model-selector [(selected)]="selectedModel" [models]="models()" />
+
+      <button
+        class="round-btn"
+        [class.recording]="voice.isRecording"
+        [attr.aria-label]="draft() ? 'Send message' : (voice.isRecording ? 'Stop recording' : 'Microphone')"
+        (click)="submit()"
+      >
+        <svg lucideMic [size]="12" [strokeWidth]="2"></svg>
+      </button>
+      <button
+        class="round-btn"
+        [class.recording]="conversation.active()"
+        [attr.aria-label]="conversation.active() ? 'End voice conversation' : 'Start voice conversation'"
+        (click)="conversation.active() ? conversation.end() : conversation.start()"
+      >
+        <svg lucideAudioLines [size]="12" [strokeWidth]="2"></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    @for (action of quickActions(); track action.label) {
+      <button class="quick-action" (click)="selectQuickAction(action.label)">
+        @switch (action.icon) {
+          @case ('pen') {
+            <svg lucidePenLine [size]="11" [strokeWidth]="1.8"></svg>
+          }
+          @case ('file') {
+            <svg lucideFilePenLine [size]="11" [strokeWidth]="1.8"></svg>
+          }
+          @case ('wand') {
+            <svg lucideWandSparkles [size]="11" [strokeWidth]="1.8"></svg>
+          }
+          @case ('zap') {
+            <svg lucideZap [size]="11" [strokeWidth]="1.8"></svg>
+          }
+        }
+        <span>{{ action.label }}</span>
+      </button>
+    }
+  </div>
+</div>

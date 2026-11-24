@@ -1,0 +1,20 @@
+<div class="theme-toggle" role="group" aria-label="Colour theme">
+  <button
+    class="option"
+    [class.selected]="theme() === 'light'"
+    aria-label="Light theme"
+    (click)="themeChange.emit('light')"
+  >
+    <svg lucideSun [size]="12" [strokeWidth]="1.8"></svg>
+    <span>Light</span>
+  </button>
+  <button
+    class="option"
+    [class.selected]="theme() === 'dark'"
+    aria-label="Dark theme"
+    (click)="themeChange.emit('dark')"
+  >
+    <svg lucideMoon [size]="12" [strokeWidth]="1.8"></svg>
+    <span>Dark</span>
+  </button>
+</div>

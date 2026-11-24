@@ -1,0 +1,22 @@
+@if (platform.user()) {
+  <app-shell
+    [(page)]="page"
+    [(collapsed)]="collapsed"
+    [(theme)]="platform.theme"
+    [(selectedModel)]="platform.selectedModel"
+    [(deepResearch)]="platform.deepResearch"
+    [models]="platform.models()"
+    [(projectModalOpen)]="projectModalOpen"
+    [(profileMenuOpen)]="profileMenuOpen"
+  />
+} @else {
+  <div class="boot">
+    <div class="boot-brand"><span>HFR</span><span class="accent">CHAT</span></div>
+    @if (platform.error()) {
+      <p class="boot-error">{{ platform.error() }}</p>
+      <button (click)="retry()">إعادة المحاولة</button>
+    } @else {
+      <p class="boot-loading">جارٍ التحميل…</p>
+    }
+  </div>
+}

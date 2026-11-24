@@ -1,0 +1,51 @@
+<section class="skills-page">
+  <header class="page-header">
+    <h1>Skills</h1>
+    <span class="active-count">
+      <svg lucideSparkles [size]="12" [strokeWidth]="1.8"></svg>
+      <span>{{ activeCount() }} active</span>
+    </span>
+  </header>
+
+  <div class="page-body">
+    <div class="skills-tab">Skills</div>
+
+    <div class="controls">
+      <label class="search-field">
+        <svg lucideSearch [size]="13" [strokeWidth]="1.8"></svg>
+        <input type="text" placeholder="Search skills..." aria-label="Search skills" [(ngModel)]="query" />
+      </label>
+      <button class="primary-btn" (click)="showCreate.set(!showCreate())">
+        <svg lucidePlus [size]="13" [strokeWidth]="2"></svg>
+        <span>Create skill</span>
+      </button>
+    </div>
+
+    @if (showCreate()) {
+      <div class="create-panel">
+        <div class="create-head">
+          <strong>New skill</strong>
+          <button aria-label="Close" (click)="showCreate.set(false)">
+            <svg lucideX [size]="13" [strokeWidth]="1.8"></svg>
+          </button>
+        </div>
+        <input type="text" placeholder="Skill name" [(ngModel)]="newName" />
+        <input type="text" placeholder="Short description" [(ngModel)]="newDescription" />
+        <textarea placeholder="Instructions used when this skill is active" rows="3" [(ngModel)]="newInstructions"></textarea>
+        <button class="primary-btn" [disabled]="saving()" (click)="createSkill()">
+          {{ saving() ? 'Saving…' : 'Save skill' }}
+        </button>
+      </div>
+    }
+
+    <div class="section-label">BUILT-IN</div>
+
+    <div class="skills-grid">
+      @for (skill of filteredSkills(); track skill.id) {
+        <app-skill-card [skill]="skill" (toggle)="toggleSkill($event)" />
+      } @empty {
+        <div class="no-results">No skills found</div>
+      }
+    </div>
+  </div>
+</section>

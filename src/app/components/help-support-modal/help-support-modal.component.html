@@ -1,0 +1,29 @@
+<div class="backdrop" (click)="closed.emit()">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Help & Support" (click)="$event.stopPropagation()">
+    <div class="head">
+      <span class="icon"><svg lucideLifeBuoy [size]="15" [strokeWidth]="1.8"></svg></span>
+      <button class="close" aria-label="Close" (click)="closed.emit()">
+        <svg lucideX [size]="14" [strokeWidth]="1.8"></svg>
+      </button>
+    </div>
+    <h2>Help &amp; Support</h2>
+    <p class="subtitle">Send a message to our support team</p>
+
+    <button class="card" (click)="contactNotice.set(true)">
+      <span class="card-icon teal"><svg lucideMessageCircle [size]="15" [strokeWidth]="1.8"></svg></span>
+      <span><strong>Contact Support</strong><small>Send a message to our support team</small></span>
+    </button>
+    <button class="card" (click)="openReport.emit()">
+      <span class="card-icon red"><svg lucideBug [size]="15" [strokeWidth]="1.8"></svg></span>
+      <span><strong>Report a bug</strong><small>Something broken? Let us know</small></span>
+    </button>
+    <button class="card" (click)="openTour.emit()">
+      <span class="card-icon teal"><svg lucideCompass [size]="15" [strokeWidth]="1.8"></svg></span>
+      <span><strong>Take a Tour</strong><small>Walk through the app features again</small></span>
+    </button>
+
+    @if (contactNotice()) {
+      <p class="notice">No support channel is configured in this deployment.</p>
+    }
+  </div>
+</div>

@@ -1,0 +1,6 @@
+<div class="confirm-popover" role="alertdialog" aria-label="Confirmation">
+  <span class="trash"><svg lucideTrash2 [size]="14" [strokeWidth]="1.8"></svg></span>
+  <span class="message">{{ message() }}</span>
+  <button class="cancel" (click)="cancel.emit()">{{ cancelLabel() }}</button>
+  <button class="delete" (click)="confirm.emit()">{{ confirmLabel() }}</button>
+</div>

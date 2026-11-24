@@ -1,0 +1,46 @@
+<div class="backdrop" (click)="cancel()">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="create-project-title" (click)="$event.stopPropagation()">
+    <div class="modal-top">
+      <span class="modal-icon">
+        <svg lucideFolderPlus [size]="14" [strokeWidth]="1.9"></svg>
+      </span>
+      <button class="close-btn" aria-label="Close" (click)="cancel()">
+        <svg lucideX [size]="14" [strokeWidth]="1.8"></svg>
+      </button>
+    </div>
+
+    <h2 id="create-project-title" class="modal-title">Create project</h2>
+    <p class="modal-subtitle">Keep chats, files, and instructions together for ongoing work.</p>
+
+    <label class="field-label" for="project-name">Project name</label>
+    <div class="name-field">
+      <span class="folder-glyph" aria-hidden="true">📁</span>
+      <input
+        id="project-name"
+        type="text"
+        placeholder="e.g. Copenhagen Trip"
+        [(ngModel)]="projectName"
+        (input)="selectedSuggestion.set(null)"
+      />
+    </div>
+
+    <p class="suggestions-label">Try one of these</p>
+    <div class="suggestions">
+      @for (item of suggestions; track item.label) {
+        <button
+          class="suggestion"
+          [class.chosen]="selectedSuggestion() === item.label"
+          (click)="selectSuggestion(item.label)"
+        >
+          <span>{{ item.emoji }}</span>
+          <span>{{ item.label }}</span>
+        </button>
+      }
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" (click)="cancel()">Cancel</button>
+      <button class="btn-create" (click)="submit()">Create project</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,86 @@
+<div class="backdrop" (click)="closed.emit()">
+  <div class="modal" role="dialog" aria-modal="true" aria-label="Settings" (click)="$event.stopPropagation()">
+    <aside class="side">
+      <div class="side-title">
+        <svg lucideSettings [size]="14" [strokeWidth]="1.8"></svg>
+        <strong>Settings</strong>
+      </div>
+      <nav>
+        <button [class.active]="tab() === 'profile'" (click)="tab.set('profile')">
+          <svg lucideUser [size]="13" [strokeWidth]="1.8"></svg> Profile
+        </button>
+        <button [class.active]="tab() === 'personalization'" (click)="tab.set('personalization')">
+          <svg lucideSlidersHorizontal [size]="13" [strokeWidth]="1.8"></svg> Personalization
+        </button>
+        <button [class.active]="tab() === 'appearance'" (click)="tab.set('appearance')">
+          <svg lucidePalette [size]="13" [strokeWidth]="1.8"></svg> Appearance
+        </button>
+      </nav>
+    </aside>
+
+    <section class="content">
+      <button class="close" aria-label="Close" (click)="closed.emit()">
+        <svg lucideX [size]="14" [strokeWidth]="1.8"></svg>
+      </button>
+
+      @switch (tab()) {
+        @case ('profile') {
+          <h2>Profile</h2>
+          <p class="subtitle">Manage your personal information</p>
+          <div class="identity">
+            <span class="avatar">{{ (fullName() || 'M').charAt(0) }}</span>
+            <div>
+              <strong>{{ platform.user()?.displayName }}</strong>
+              <small>{{ platform.user()?.email }}</small>
+            </div>
+          </div>
+          <label>
+            <span>Full Name</span>
+            <input type="text" [(ngModel)]="fullName" />
+          </label>
+          <label>
+            <span>Email</span>
+            <input type="email" [(ngModel)]="email" />
+          </label>
+          <div class="actions">
+            <button class="save" [disabled]="saving()" (click)="saveProfile()">
+              {{ saving() ? 'Saving…' : 'Save Changes' }}
+            </button>
+            @if (saved()) { <span class="saved">Saved</span> }
+          </div>
+          <div class="danger">
+            <h3>Danger Zone</h3>
+            <button class="delete-account" (click)="confirmDelete.set(true)">
+              <svg lucideTrash2 [size]="12" [strokeWidth]="1.8"></svg> Delete Account
+            </button>
+          </div>
+        }
+        @case ('personalization') {
+          <h2>Personalization</h2>
+          <p class="subtitle">Choose your language</p>
+          <div class="options">
+            <button [class.selected]="platform.language() === 'en'" (click)="setLanguage('en')">English</button>
+            <button [class.selected]="platform.language() === 'ar'" (click)="setLanguage('ar')">العربية</button>
+          </div>
+        }
+        @case ('appearance') {
+          <h2>Appearance</h2>
+          <p class="subtitle">Choose your theme</p>
+          <div class="options">
+            <button [class.selected]="platform.theme() === 'light'" (click)="platform.saveTheme('light')">Light</button>
+            <button [class.selected]="platform.theme() === 'dark'" (click)="platform.saveTheme('dark')">Dark</button>
+          </div>
+        }
+      }
+    </section>
+
+    @if (confirmDelete()) {
+      <app-confirm-dialog
+        message="Delete account?"
+        confirmLabel="Delete"
+        (confirm)="platform.deleteAccount()"
+        (cancel)="confirmDelete.set(false)"
+      />
+    }
+  </div>
+</div>

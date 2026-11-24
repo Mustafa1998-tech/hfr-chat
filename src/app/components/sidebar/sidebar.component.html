@@ -1,0 +1,134 @@
+<aside class="sidebar" [class.collapsed]="collapsed()">
+  @if (!collapsed()) {
+    <div class="brand-row">
+      <div class="brand">
+        <span class="brand-main">HFR</span><span class="brand-accent">CHAT</span>
+      </div>
+      <button
+        class="icon-btn"
+        data-tooltip="Collapse sidebar"
+        aria-label="Collapse sidebar"
+        (click)="toggleSidebar()"
+      >
+        <svg lucidePanelLeft [size]="15" [strokeWidth]="1.7"></svg>
+      </button>
+    </div>
+
+    <nav class="nav-list" aria-label="Main navigation">
+      <button class="nav-item" (click)="startNewChat()">
+        <svg lucidePlus [size]="15" [strokeWidth]="1.8"></svg>
+        <span>New</span>
+      </button>
+      <button
+        class="nav-item"
+        [class.active]="page() === 'skills'"
+        (click)="navigate('skills')"
+      >
+        <svg lucideSparkles [size]="15" [strokeWidth]="1.7"></svg>
+        <span>Skills</span>
+      </button>
+      <button
+        class="nav-item"
+        [class.active]="page() === 'projects'"
+        (click)="navigate('projects')"
+      >
+        <svg lucideFolder [size]="15" [strokeWidth]="1.7"></svg>
+        <span>Projects</span>
+      </button>
+      <button
+        class="nav-item"
+        [class.active]="page() === 'agents'"
+        (click)="navigate('agents')"
+      >
+        <svg lucideBot [size]="15" [strokeWidth]="1.7"></svg>
+        <span>Agents</span>
+      </button>
+    </nav>
+
+    <div class="chats-section">
+      <div class="chats-heading">
+        <span>Chats</span>
+        <button class="icon-btn search-btn" aria-label="Search chats">
+          <svg lucideSearch [size]="14" [strokeWidth]="1.8"></svg>
+        </button>
+      </div>
+
+      <div class="chat-list">
+        @for (chat of chats(); track chat.id) {
+          <button
+            class="chat-item"
+            [class.active]="platform.activeChatId() === chat.id"
+            [title]="chat.title"
+            (click)="openChat(chat.id)"
+          >
+            <span class="chat-title">{{ chat.title }}</span>
+            @if (platform.activeChatId() === chat.id) {
+              <span class="chat-actions">
+                <svg lucideShare2 [size]="12" [strokeWidth]="1.7"></svg>
+                <svg lucideEllipsis [size]="13" [strokeWidth]="1.7"></svg>
+              </span>
+            }
+          </button>
+        } @empty {
+          <div class="chat-empty">No chats yet</div>
+        }
+      </div>
+    </div>
+
+    <div class="sidebar-spacer"></div>
+
+    <button class="profile-btn" [class.menu-open]="profileMenuOpen()" (click)="toggleProfileMenu()">
+      <span class="avatar">MH</span>
+      <span class="profile-text">
+        <span class="profile-name">{{ username() }}</span>
+        <span class="profile-role">Member</span>
+      </span>
+      @if (profileMenuOpen()) {
+        <svg lucideChevronLeft [size]="13" [strokeWidth]="1.8"></svg>
+      } @else {
+        <svg lucideChevronRight [size]="13" [strokeWidth]="1.8"></svg>
+      }
+    </button>
+  } @else {
+    <button
+      class="rail-btn rail-top"
+      data-tooltip="Expand sidebar"
+      aria-label="Expand sidebar"
+      (click)="toggleSidebar()"
+    >
+      <svg lucidePanelLeft [size]="17" [strokeWidth]="1.7"></svg>
+    </button>
+
+    <nav class="rail-nav" aria-label="Compact navigation">
+      <button class="rail-btn" data-tooltip="Search" aria-label="Search">
+        <svg lucideSearch [size]="16" [strokeWidth]="1.8"></svg>
+      </button>
+      <button class="rail-btn" data-tooltip="New chat" aria-label="New chat" (click)="startNewChat()">
+        <svg lucidePlus [size]="17" [strokeWidth]="1.8"></svg>
+      </button>
+      <button class="rail-btn" data-tooltip="Skills" aria-label="Skills" (click)="navigate('skills')">
+        <svg lucideSparkles [size]="16" [strokeWidth]="1.7"></svg>
+      </button>
+      <button class="rail-btn" data-tooltip="Projects" aria-label="Projects" (click)="navigate('projects')">
+        <svg lucideFolder [size]="16" [strokeWidth]="1.7"></svg>
+      </button>
+      <button class="rail-btn" data-tooltip="Agents" aria-label="Agents" (click)="navigate('agents')">
+        <svg lucideBot [size]="16" [strokeWidth]="1.7"></svg>
+      </button>
+      <button class="rail-btn" data-tooltip="Chats" aria-label="Chats" (click)="navigate('chat')">
+        <svg lucideMessageSquare [size]="16" [strokeWidth]="1.7"></svg>
+      </button>
+    </nav>
+
+    <div class="rail-spacer"></div>
+
+    <button
+      class="avatar rail-avatar"
+      data-tooltip="Account"
+      aria-label="Account"
+      (click)="toggleProfileMenu()"
+    >
+      MH
+    </button>
+  }
+</aside>

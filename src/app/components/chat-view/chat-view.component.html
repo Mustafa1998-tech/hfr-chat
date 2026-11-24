@@ -1,0 +1,55 @@
+<section class="chat-view">
+  <header class="chat-header">
+    <button class="back" (click)="platform.closeChat()">‹ Back to chat home</button>
+    <span class="chat-title">{{ title() }}</span>
+    @if (platform.activeAgentName()) {
+      <span class="agent-tag">{{ platform.activeAgentName() }}</span>
+    }
+    <button class="translate" (click)="translateRequested.emit()">Translate</button>
+    <button class="delete" (click)="confirmOpen.set(true)">Delete chat</button>
+  </header>
+
+  <div class="messages">
+    @for (message of platform.messages(); track message.id) {
+      <div
+        class="message"
+        [class.user]="message.role === 'user'"
+        [class.assistant]="message.role === 'assistant'"
+        [class.error]="message.isError"
+      >
+        <div class="role">{{ message.role === 'user' ? 'You' : (message.isError ? 'Notice' : 'HFR') }}</div>
+        <div class="content">{{ message.content }}</div>
+      </div>
+    }
+    @if (platform.streamingText()) {
+      <div class="message assistant">
+        <div class="role">HFR</div>
+        <div class="content">{{ platform.streamingText() }}</div>
+      </div>
+    }
+    @if (platform.messages().length === 0 && !platform.streamingText()) {
+      <p class="empty">No messages in this conversation yet.</p>
+    }
+  </div>
+
+  @if (platform.providerIssue()) {
+    <div class="notice">{{ platform.providerIssue() }}</div>
+  }
+
+  <div class="composer-area">
+    <app-chat-composer
+      [selectedModel]="platform.selectedModel()"
+      (selectedModelChange)="onModelChange($event)"
+      [deepResearch]="platform.deepResearch()"
+      (deepResearchChange)="platform.setDeepResearch($event)"
+      [models]="platform.models()"
+      (send)="send($event)"
+    />
+  </div>
+  @if (confirmOpen()) {
+    <app-confirm-dialog
+      (confirm)="platform.deleteChat(platform.activeChatId()!); confirmOpen.set(false)"
+      (cancel)="confirmOpen.set(false)"
+    />
+  }
+</section>

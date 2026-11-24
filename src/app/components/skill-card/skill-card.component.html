@@ -1,0 +1,49 @@
+<article class="skill-card" [class.disabled]="!skill().enabled">
+  <div class="card-head">
+    <span class="skill-icon">
+      @switch (skill().icon) {
+        @case ('canvas') {
+          <svg lucideShapes [size]="12" [strokeWidth]="2"></svg>
+        }
+        @case ('creator') {
+          <svg lucideWandSparkles [size]="12" [strokeWidth]="2"></svg>
+        }
+        @case ('frontend') {
+          <svg lucideLayoutTemplate [size]="12" [strokeWidth]="2"></svg>
+        }
+        @case ('style') {
+          <svg lucideBadgeCheck [size]="12" [strokeWidth]="2"></svg>
+        }
+        @case ('template') {
+          <svg lucideFileText [size]="12" [strokeWidth]="2"></svg>
+        }
+      }
+    </span>
+    <h3 class="skill-name">{{ skill().name }}</h3>
+    <button
+      class="switch"
+      [class.on]="skill().enabled"
+      role="switch"
+      [attr.aria-checked]="skill().enabled"
+      [attr.aria-label]="'Toggle ' + skill().name"
+      (click)="toggle.emit(skill().id)"
+    >
+      <span class="switch-thumb"></span>
+    </button>
+  </div>
+
+  <p class="skill-description" [class.expanded]="expanded()">
+    {{ skill().description }}
+  </p>
+
+  @if (hasOverflow()) {
+    <button class="read-more" (click)="expanded.set(!expanded())">
+      <span>{{ expanded() ? 'Read less' : 'Read more' }}</span>
+      @if (expanded()) {
+        <svg lucideChevronUp [size]="11" [strokeWidth]="2"></svg>
+      } @else {
+        <svg lucideChevronDown [size]="11" [strokeWidth]="2"></svg>
+      }
+    </button>
+  }
+</article>
